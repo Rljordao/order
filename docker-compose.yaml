@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  api-order:
+    container_name: api-order
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: api-order:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - SQLSERVER_PORT=1433
+      - SQLSERVER_DATABASE=order_ambev
+      - MSSQL_SA_PASSWORD=MyP@ssw0rd123
+      - SERVER_PORT=8081
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+      - MSSQL_SA_USERNAME=sa
+      - SQLSERVER_HOST=sqlserver
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - sqlserver
+      - kafka
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=MyP@ssw0rd123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    restart: always
+    networks:
+      - spring-cloud-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - spring-cloud-network
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092,PLAINTEXT_HOST://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - kafka
+    ports:
+      - "19000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+
+volumes:
+  sqlserver-data:
+
+networks:
+  spring-cloud-network:
+    driver: bridge

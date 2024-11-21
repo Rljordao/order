@@ -1,0 +1,64 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+# Ignorar arquivos do macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignorar o diretório de backup criado pelo Finder
+**/.Trashes
+
+# Ignorar os arquivos de preferências do Finder
+**/.fseventsd
+
+# Ignorar a pasta de logs de preferências
+**/.Spotlight-V100
+
+# Ignorar cache de dados de aplicativos
+**/.DocumentRevisions-V100
+
+# Ignorar o diretório de caches do sistema
+**/.TemporaryItems
+
+# Ignorar a pasta de preferências do macOS
+**/.AppleDouble/
+
+# Ignorar arquivos de configuração específicos de ambiente dentro de resources
+src/main/resources/application-*.properties
+
+
+
+
