@@ -2,8 +2,8 @@ package br.com.ambev.order.interfaces.api.controller;
 
 import br.com.ambev.openapi.model.OrderModel;
 import br.com.ambev.order.domain.model.Order;
-import br.com.ambev.order.infrastructure.service.OrderService;
 import br.com.ambev.order.interfaces.api.controller.mapper.OrderMapper;
+import br.com.ambev.order.usecase.FindOrderByOrderNumberUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ class OrderControllerTest {
     private OrderController orderController;
 
     @Mock
-    private OrderService orderService;
+    private FindOrderByOrderNumberUseCase findOrderByOrderNumberUseCase;
 
     @Mock
     private OrderMapper orderMapper;
@@ -46,14 +46,14 @@ class OrderControllerTest {
 
     @Test
     void getOrderSuccessTest() {
-        when(orderService.fetchOrderByOrderNumber(BigInteger.valueOf(12345))).thenReturn(mockOrder);
+        when(findOrderByOrderNumberUseCase.execute(BigInteger.valueOf(12345))).thenReturn(mockOrder);
         when(orderMapper.toModel(mockOrder)).thenReturn(mockOrderModel);
 
         ResponseEntity<OrderModel> response = orderController.getOrder("12345");
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(mockOrderModel, response.getBody());
-        verify(orderService, times(1)).fetchOrderByOrderNumber(BigInteger.valueOf(12345));
+        verify(findOrderByOrderNumberUseCase, times(1)).execute(BigInteger.valueOf(12345));
         verify(orderMapper, times(1)).toModel(mockOrder);
     }
 }

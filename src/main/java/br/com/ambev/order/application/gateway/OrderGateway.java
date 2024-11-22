@@ -16,7 +16,9 @@ public interface OrderGateway {
 
     void deleteOrder(Long id);
 
-    Order fetchOrderByOrderNumber(BigInteger orderNumber);
+    Boolean existsByOrderNumber(BigInteger orderNumber);
+
+    Order findOrderByOrderNumber(BigInteger orderNumber);
 
     void setOrderStatus(Order order, OrderStatusEnum statusEnum);
 }

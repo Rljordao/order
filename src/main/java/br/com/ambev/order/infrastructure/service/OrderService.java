@@ -44,7 +44,11 @@ public class OrderService implements OrderGateway {
     }
 
     @Override
-    public Order fetchOrderByOrderNumber(BigInteger orderNumber) {
+    public Boolean existsByOrderNumber(BigInteger orderNumber) {
+        return orderRepository.existsByOrderNumber(orderNumber);
+    }
+    @Override
+    public Order findOrderByOrderNumber(BigInteger orderNumber) {
         return orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new OrderNotFoundException(
                         String.format("Pedido com número %d não encontrado", orderNumber)

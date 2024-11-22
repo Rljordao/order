@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -97,7 +98,7 @@ class OrderServiceTest {
     void fetchOrderByOrderNumber_shouldReturnOrder_whenOrderExists() {
         when(orderRepository.findByOrderNumber(BigInteger.valueOf(123456))).thenReturn(Optional.of(order));
 
-        Order result = orderService.fetchOrderByOrderNumber(BigInteger.valueOf(123456));
+        Order result = orderService.findOrderByOrderNumber(BigInteger.valueOf(123456));
 
         assertEquals(order, result, "O pedido deve ser retornado corretamente pelo número do pedido.");
     }
@@ -107,7 +108,7 @@ class OrderServiceTest {
         when(orderRepository.findByOrderNumber(BigInteger.valueOf(123456))).thenReturn(Optional.empty());
 
         OrderNotFoundException exception = assertThrows(OrderNotFoundException.class, () -> {
-            orderService.fetchOrderByOrderNumber(BigInteger.valueOf(123456));
+            orderService.findOrderByOrderNumber(BigInteger.valueOf(123456));
         });
 
         assertEquals("Pedido com número 123456 não encontrado", exception.getMessage());
@@ -120,5 +121,18 @@ class OrderServiceTest {
 
         orderService.setOrderStatus(order, newStatus);
         assertEquals(order.getStatus().getStatus(), newStatus);
+    }
+
+
+    @Test
+    void testDoesOrderExist() {
+        BigInteger orderNumber = new BigInteger("123456789");
+
+        when(orderRepository.existsByOrderNumber(orderNumber)).thenReturn(true);
+
+        boolean exists = orderService.existsByOrderNumber(orderNumber);
+
+        assertTrue(exists);
+        verify(orderRepository, times(1)).existsByOrderNumber(orderNumber);
     }
 }
