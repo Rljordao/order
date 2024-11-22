@@ -91,3 +91,59 @@ O projeto inclui testes unitários e de integração utilizando **JUnit 5** e **
 1. **Producer**: O Order envia eventos relacionados ao processamento de pedidos para o Kafka, utilizando o produtor configurado.
 2. **Consumer**: O Order consome os eventos de pedidos de outros sistemas, processando-os de forma assíncrona. Se o processamento falhar, a mensagem será colocada na **Dead Letter Queue (DLQ)**.
 3. **Retries e Backoff**: Caso o consumidor não consiga processar a mensagem inicialmente, ele tentará novamente de acordo com a configuração de **retry** e **backoff**.
+
+
+Aqui está um exemplo de como você pode incluir no README um exemplo de mensagem para consumir e produzir, usando o formato JSON que você forneceu:
+
+---
+
+## 📦 Exemplo de Mensagens para Produção e Consumo
+
+### 📝 Exemplo de Mensagem de Pedido (JSON)
+
+
+```json
+{
+  "independentKey": "order123",
+  "modificationDate": "2024-11-20T15:00:00",
+  "creationDate": "2024-11-20T14:00:00",
+  "totalValue": 250.00,
+  "itemsTotalValue": 200.00,
+  "itemsDiscountTotalValue": 50.00,
+  "billingDate": "2024-11-21T15:00:00",
+  "dateSale": "2024-11-20T13:00:00",
+  "status": {
+    "status": "READY_FOR_BILLING"
+  },
+  "customer": {
+    "customerId": 1,
+    "name": "John Doe"
+  },
+  "deliveryAddress": {
+    "addressDescription": "123 Street",
+    "city": "Cityville",
+    "state": "Bahia"
+  },
+  "paymentMethods": [
+    {
+      "paymentMethodId": "1",
+      "totalValue": 250.00
+    }
+  ],
+  "items": [
+    {
+      "productId": 1,
+      "productName": "Product A",
+      "quantity": 10,
+      "unitPrice": 20.00,
+      "totalItem": 200.00,
+      "discount": {
+        "id": 1,
+        "discountValue": 50.00,
+        "percentageDiscount": 25.00,
+        "discountType": "PROMOTION"
+      }
+    }
+  ]
+}
+```
